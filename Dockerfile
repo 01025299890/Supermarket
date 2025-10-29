@@ -1,7 +1,15 @@
 FROM php:8.2-cli
 
-# تثبيت الامتدادات المطلوبة
-RUN docker-php-ext-install gd pdo pdo_mysql
+# تثبيت المكتبات الأساسية اللي GD بيحتاجها
+RUN apt-get update && apt-get install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
+    libzip-dev \
+    zlib1g-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-webp \
+    && docker-php-ext-install gd pdo pdo_mysql zip
 
 # نسخ المشروع
 COPY . /app
